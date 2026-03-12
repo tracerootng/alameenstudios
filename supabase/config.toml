@@ -1,0 +1,7 @@
+project_id = "twmbprnbvkqrwpgwxldh"
+
+[functions.get-library-covers]
+verify_jwt = false
+
+[functions.unlock-event-gallery]
+verify_jwt = false
