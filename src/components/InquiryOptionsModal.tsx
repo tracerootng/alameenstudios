@@ -40,7 +40,7 @@ export function InquiryOptionsModal({
   packagePrice,
   onBookWebsite 
 }: InquiryOptionsModalProps) {
-  const whatsappNumber = "2349160000500";
+  const whatsappNumber = "2347034738900";
   
   const handleWhatsApp = () => {
     const message = encodeURIComponent(

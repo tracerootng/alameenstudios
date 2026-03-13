@@ -139,7 +139,7 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
           >
             <div className="w-16 h-px bg-primary/50" />
             <span className="font-body text-[9px] tracking-[0.5em] uppercase text-muted-foreground">
-              Luxury · Kano · Abuja · Global
+              Luxury · Kano · Global
             </span>
           </motion.div>
 

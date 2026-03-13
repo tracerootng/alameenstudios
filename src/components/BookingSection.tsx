@@ -330,7 +330,7 @@ export function BookingSection() {
             </h3>
             <ul className="space-y-4">
               {[
-                "Travel and accommodation outside Kano/Abuja are billed separately and discussed during consultation.",
+                "Travel and accommodation outside Kano are billed separately and discussed during consultation.",
                 "Your date is not secured until the booking fee is received and confirmed.",
                 "Availability operates on a first-come, first-served basis.",
               ].map((note, i) => (

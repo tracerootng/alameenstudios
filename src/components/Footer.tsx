@@ -132,7 +132,15 @@ export function Footer() {
                   <span className="font-body text-sm tracking-[0.2em] uppercase text-primary font-semibold">Bank</span>
                   <span className="hidden sm:block w-px h-4 bg-primary/40" />
                   <span className="font-display text-lg lg:text-xl text-foreground tracking-wide">
-                    First City Monument Bank (FCMB)
+                    FIRST BANK
+                  </span>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                  <span className="font-body text-sm tracking-[0.2em] uppercase text-primary font-semibold">Name</span>
+                  <span className="hidden sm:block w-px h-4 bg-primary/40" />
+                  <span className="font-display text-lg lg:text-xl text-foreground tracking-wide">
+                    AL AMEEN STUDIOS
                   </span>
                 </div>
                 
@@ -140,9 +148,9 @@ export function Footer() {
                   <span className="font-body text-sm tracking-[0.2em] uppercase text-primary font-semibold">Account</span>
                   <span className="hidden sm:block w-px h-4 bg-primary/40" />
                   <span className="font-display text-3xl lg:text-4xl text-metallic-gold tracking-[0.15em] font-medium">
-                    8660588015
+                    2043281301
                   </span>
-                  <CopyButton text="" label="Account number" />
+                  <CopyButton text="2043281301" label="Account number" />
                 </div>
               </div>
             </div>
@@ -175,7 +183,7 @@ export function Footer() {
               Beyond The Ordinary
             </p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed">
-              Luxury wedding & portrait photography based in Abuja & Kaduna, Nigeria.
+              Hadejia Road Opposite MTN Office, Kano, Nigeria
             </p>
           </motion.div>
 
@@ -223,27 +231,27 @@ export function Footer() {
             </p>
             <div className="space-y-4">
               <a
-                href="mailto:yaseerkay@gmail.com"
+                href="mailto:alameensaddiq57@gmail.com"
                 className="flex items-center justify-center md:justify-end gap-3 font-body text-sm text-muted-foreground hover:text-primary transition-colors group"
               >
                 <Mail className="w-4 h-4 group-hover:text-primary transition-colors" />
-                yaseerkay@gmail.com
+                alameensaddiq57@gmail.com
               </a>
               <a
-                href="tel:+2349160000500"
+                href="tel:07034738900"
                 className="flex items-center justify-center md:justify-end gap-3 font-body text-sm text-muted-foreground hover:text-primary transition-colors group"
               >
                 <Phone className="w-4 h-4 group-hover:text-primary transition-colors" />
-                +234 916 000 0500
+                07034738900
               </a>
               <a
-                href="https://instagram.com/alameen_studios"
+                href="https://instagram.com/alameenstudios"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center md:justify-end gap-3 font-body text-sm text-muted-foreground hover:text-primary transition-colors group"
               >
                 <Instagram className="w-4 h-4 group-hover:text-primary transition-colors" />
-                @alameen_studios
+                @alameenstudios
               </a>
             </div>
           </motion.div>

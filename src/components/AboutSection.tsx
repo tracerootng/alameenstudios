@@ -20,7 +20,7 @@ const pillars = [
   {
     icon: Sparkles,
     title: "Global Inspiration",
-    description: "Rooted in Nigeria with bases in Kano and Abuja, we are globally inspired and available for destination weddings worldwide.",
+    description: "Rooted in Nigeria with a base in Kano, we are globally inspired and available for destination weddings worldwide.",
   },
   {
     icon: Crown,

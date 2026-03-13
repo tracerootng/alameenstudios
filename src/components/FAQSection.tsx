@@ -6,7 +6,7 @@ const faqs = [
   {
     question: "Do you travel for destination weddings?",
     answer:
-      "Absolutely! While we're based in Kano and Abuja, Nigeria, we're globally inspired and destination-ready. We've captured beautiful moments across the world. Travel and accommodation costs are discussed during your consultation and billed separately from your chosen package.",
+      "Absolutely! While we're based in Kano, Nigeria, we're globally inspired and destination-ready. We've captured beautiful moments across the world. Travel and accommodation costs are discussed during your consultation and billed separately from your chosen package.",
   },
   {
     question: "What is your editing process like?",
