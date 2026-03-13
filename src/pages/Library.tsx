@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { accessCodeSchema, getErrorMessage, logError, checkRateLimit, recordAttempt } from "@/lib/security";
 import JSZip from "jszip";
+import { ALL_PHOTOS } from "@/lib/photos";
 
 interface Event {
   id: string;
@@ -62,8 +63,14 @@ export default function Library() {
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxPhotos, setLightboxPhotos] = useState<any[]>([]);
   const [downloadingIndex, setDownloadingIndex] = useState<number | null>(null);
   const [downloadingAll, setDownloadingAll] = useState(false);
+
+  // Portfolio state
+  const [activeTab, setActiveTab] = useState<"events" | "portfolio">("portfolio");
+  const [portfolioPage, setPortfolioPage] = useState(1);
+  const portfolioPageSize = 24;
 
   useEffect(() => {
     fetchEvents();
@@ -259,6 +266,17 @@ export default function Library() {
     setLightboxOpen(false);
   };
 
+  // Memoized Portfolio Photos
+  const displayedPortfolio = useMemo(() => {
+    return ALL_PHOTOS.slice(0, portfolioPage * portfolioPageSize);
+  }, [portfolioPage]);
+
+  const hasMorePortfolio = displayedPortfolio.length < ALL_PHOTOS.length;
+
+  const loadMorePortfolio = () => {
+    setPortfolioPage(p => p + 1);
+  };
+
   // Download single photo
   const downloadPhoto = async (photo: Photo, index: number) => {
     setDownloadingIndex(index);
@@ -377,7 +395,8 @@ export default function Library() {
   };
 
   // Lightbox navigation
-  const openLightbox = (index: number) => {
+  const openLightbox = (index: number, photosArray: any[] = unlockedPhotos) => {
+    setLightboxPhotos(photosArray);
     setLightboxIndex(index);
     setLightboxOpen(true);
   };
@@ -387,11 +406,11 @@ export default function Library() {
   };
 
   const goToPrevious = () => {
-    setLightboxIndex((prev) => (prev === 0 ? unlockedPhotos.length - 1 : prev - 1));
+    setLightboxIndex((prev) => (prev === 0 ? lightboxPhotos.length - 1 : prev - 1));
   };
 
   const goToNext = () => {
-    setLightboxIndex((prev) => (prev === unlockedPhotos.length - 1 ? 0 : prev + 1));
+    setLightboxIndex((prev) => (prev === lightboxPhotos.length - 1 ? 0 : prev + 1));
   };
 
   const uniquePackages = useMemo(() => {
@@ -410,7 +429,7 @@ export default function Library() {
               className="flex items-center gap-2 font-display text-xl tracking-[0.15em] text-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              DONYASS
+              AL AMEEN STUDIOS
             </Link>
             <h1 className="font-display text-lg tracking-[0.1em] text-foreground">
               Client Library
@@ -422,30 +441,86 @@ export default function Library() {
       {/* Main Content */}
       <main className="pt-32 pb-20 px-6 lg:px-12">
         <div className="container mx-auto max-w-7xl">
-          {/* Page Title */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
-          >
-            <p className="font-body text-xs tracking-[0.4em] uppercase text-primary mb-4">
-              Exclusive Access
-            </p>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl tracking-[0.1em] text-foreground mb-4">
-              Event <span className="italic">Gallery</span>
-            </h2>
-            <p className="font-body text-sm text-muted-foreground max-w-xl mx-auto">
-              Browse through our collection of beautifully captured moments. Enter your access code to unlock your gallery.
-            </p>
-          </motion.div>
+          {/* Page Title & View Toggle */}
+          <div className="flex flex-col items-center mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mb-8"
+            >
+              <p className="font-body text-xs tracking-[0.4em] uppercase text-primary mb-4">
+                Explore Our Work
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl tracking-[0.1em] text-foreground mb-4">
+                Client <span className="italic">Library</span>
+              </h2>
+              <p className="font-body text-sm text-muted-foreground max-w-xl mx-auto">
+                Browse through our portfolio or enter an access code to unlock your private event gallery.
+              </p>
+            </motion.div>
 
-          {/* Filters */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex flex-col md:flex-row gap-4 mb-10"
-          >
+            {/* Toggle Switch */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="inline-flex bg-card border border-primary/20 p-1 mb-8"
+            >
+              <button
+                onClick={() => setActiveTab("events")}
+                className={`relative px-8 py-3 font-body text-sm tracking-[0.15em] uppercase transition-colors duration-300 ${
+                  activeTab === "events" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {activeTab === "events" && (
+                  <motion.div
+                    layoutId="library-tab"
+                    className="absolute inset-0 bg-primary"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <Lock className="w-4 h-4" />
+                  Client Events
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab("portfolio")}
+                className={`relative px-8 py-3 font-body text-sm tracking-[0.15em] uppercase transition-colors duration-300 ${
+                  activeTab === "portfolio" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {activeTab === "portfolio" && (
+                  <motion.div
+                    layoutId="library-tab"
+                    className="absolute inset-0 bg-primary"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <Eye className="w-4 h-4" />
+                  Portfolio
+                </span>
+              </button>
+            </motion.div>
+          </div>
+
+          <AnimatePresence mode="wait">
+            {activeTab === "events" ? (
+              <motion.div
+                key="tab-events"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Filters */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="flex flex-col md:flex-row gap-4 mb-10"
+                >
             {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary/50" />
@@ -579,6 +654,56 @@ export default function Library() {
               ))}
             </motion.div>
           )}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="tab-portfolio"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Masonry-style Grid for Portfolio */}
+                <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+                  {displayedPortfolio.map((url, i) => (
+                    <motion.div
+                      key={url}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: (i % portfolioPageSize) * 0.05 }}
+                      className="group relative cursor-pointer overflow-hidden break-inside-avoid shadow-lg"
+                      onClick={() => openLightbox(i, displayedPortfolio.map(u => ({ photo_url: u })))}
+                    >
+                      <img
+                        src={url}
+                        alt={`Portfolio Photo`}
+                        className="w-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                        loading="lazy"
+                      />
+                      {/* Subdued overlay */}
+                      <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors duration-500 flex items-center justify-center">
+                        <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {hasMorePortfolio && (
+                  <div className="mt-16 flex justify-center">
+                    <button
+                      onClick={loadMorePortfolio}
+                      className="group inline-flex items-center gap-3 border border-primary/30 px-10 py-4 font-body text-xs tracking-[0.3em] uppercase text-primary hover:bg-primary/5 transition-colors"
+                    >
+                      Load More
+                      <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                        ↓
+                      </motion.div>
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </main>
 
@@ -764,7 +889,7 @@ export default function Library() {
 
       {/* Lightbox */}
       <AnimatePresence>
-        {lightboxOpen && unlockedPhotos[lightboxIndex] && (
+        {lightboxOpen && lightboxPhotos[lightboxIndex] && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -800,32 +925,32 @@ export default function Library() {
               <ChevronRight className="w-6 h-6" />
             </button>
 
-            {/* Image */}
+            {/* Photo */}
             <motion.div
               key={lightboxIndex}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="relative max-w-[90vw] max-h-[85vh]"
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="relative max-w-7xl max-h-[90vh] w-full px-16"
               onClick={(e) => e.stopPropagation()}
             >
               <img
-                src={unlockedPhotos[lightboxIndex].photo_url}
-                alt={unlockedPhotos[lightboxIndex].caption || "Event photo"}
-                className="max-w-full max-h-[85vh] object-contain"
+                src={lightboxPhotos[lightboxIndex].photo_url}
+                alt={lightboxPhotos[lightboxIndex].caption || "Gallery photo"}
+                className="w-full h-full object-contain"
               />
             </motion.div>
 
             {/* Bottom Controls */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4">
               <span className="font-body text-sm text-muted-foreground">
-                {lightboxIndex + 1} / {unlockedPhotos.length}
+                {lightboxIndex + 1} / {lightboxPhotos.length}
               </span>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  downloadPhoto(unlockedPhotos[lightboxIndex], lightboxIndex);
+                  downloadPhoto(lightboxPhotos[lightboxIndex], lightboxIndex);
                 }}
                 disabled={downloadingIndex === lightboxIndex}
                 className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 font-body text-xs tracking-[0.15em] uppercase hover:bg-primary/90 transition-colors disabled:opacity-50"
